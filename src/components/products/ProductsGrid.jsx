@@ -1,6 +1,7 @@
 import React from 'react';
 import {Grid} from '@material-ui/core';
 import ProductCard from './product/ProductCard';
+import useStyles from './styles';
 
 const products = [
     {
@@ -20,8 +21,10 @@ const products = [
 ];
 
 const ProductsGrid = () => {
+    const classes = useStyles();
     return (
-        <main>
+        <main className={classes.content}>
+            <div className={classes.toolbar} />
             <Grid container justify="center" spacing={4}>
                 {products.map((product) => {
                     return (
