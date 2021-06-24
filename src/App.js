@@ -3,23 +3,23 @@ import {ProductsGrid, Navbar} from './components';
 import {commerce} from './lib/commerce';
 
 const App = () => {
-    const [products, setProducts] = useState([]);
+    const [productsInStore, setProductsInStore] = useState([]);
     
     const fetchProducts = async () => {
         const { data } = await commerce.products.list();
-        setProducts(data);
+        setProductsInStore(data);
     };
 
     useEffect(() => {
         fetchProducts();
     }, []);
 
-    console.log(products);
+    console.log(productsInStore);
 
     return (
         <div>
             <Navbar />
-            <ProductsGrid/>
+            <ProductsGrid products={productsInStore}/>
         </div>
     )
 }
