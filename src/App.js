@@ -27,13 +27,13 @@ const App = () => {
 
     console.log(cart);
 
-    console.log("THE PRODUCTS IN THE STORE ARE:");
+    //console.log("THE PRODUCTS IN THE STORE ARE:");
 
-    console.log(productsInStore);
+    //console.log(productsInStore);
 
     return (
         <div>
-            <Navbar />
+            <Navbar totalItemsInCart={cart.total_items}/>
             <ProductsGrid products={productsInStore} onAddToCart={handleAddToCart}/>
         </div>
     )
