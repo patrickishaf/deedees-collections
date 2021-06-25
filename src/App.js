@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {ProductsGrid, Navbar} from './components';
+import {ProductsGrid, Navbar, Cart} from './components';
 import {commerce} from './lib/commerce';
 
 const App = () => {
@@ -25,6 +25,7 @@ const App = () => {
         fetchCart();
     }, []);
 
+    console.log("IN APP.JS, YOUR CART IS: ");
     console.log(cart);
 
     //console.log("THE PRODUCTS IN THE STORE ARE:");
@@ -34,9 +35,10 @@ const App = () => {
     return (
         <div>
             <Navbar totalItemsInCart={cart.total_items}/>
-            <ProductsGrid products={productsInStore} onAddToCart={handleAddToCart}/>
+            {/*<ProductsGrid products={productsInStore} onAddToCart={handleAddToCart}/>*/}
+            <Cart cart={cart}/>
         </div>
-    )
+    );
 }
 
 export default App
