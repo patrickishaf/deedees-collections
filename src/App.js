@@ -21,17 +21,15 @@ const App = () => {
         setCart(item.cart);
     }
 
+    const handleUpdateCartQuantity = async (productId, quantity) => {
+        const response  = await commerce.cart.update(productId, { quantity });
+        setCart(response.cart);
+    }
+
     useEffect(() => {
         fetchProducts();
         fetchCart();
     }, []);
-
-    console.log("IN APP.JS, YOUR CART IS: ");
-    console.log(cart);
-
-    //console.log("THE PRODUCTS IN THE STORE ARE:");
-
-    //console.log(productsInStore);
 
     return (
         <Router>
