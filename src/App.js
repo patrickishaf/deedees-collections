@@ -8,12 +8,26 @@ const App = () => {
     const [cart, setCart] = useState({});
     
     const fetchProducts = async () => {
-        const { data } = await commerce.products.list();
-        setProductsInStore(data);
+        try {
+            const { data } = await commerce.products.list();
+            setProductsInStore(data);
+        } catch (error) {
+            console.log("FETCHING PRODUCTS ENDED WITH AN ERROR: ");
+            console.log(error.message);
+            console.log("THE PRODUCTS IN THE STORE ARE: ")
+            console.log(productsInStore);
+        }
     };
 
     const fetchCart = async () => {
-        setCart(await commerce.cart.retrieve());
+        try {
+            setCart(await commerce.cart.retrieve());
+        } catch (error) {
+            console.log("SETTING THE CART ENDED WITH AN ERROR: ")
+            console.log(error.message);
+            console.log("YOUR CART IS CURRENTLY: ");
+            console.log(cart);
+        }
     };
 
     const addToCart = async (productId, quantity) => {
@@ -58,7 +72,7 @@ const App = () => {
                         />
                     </Route>
                     <Route exact path="/checkout">
-                        <Checkout />
+                        <Checkout cart={cart} />
                     </Route>
                 </Switch>
             </div>

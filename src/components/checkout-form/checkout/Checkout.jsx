@@ -7,16 +7,26 @@ import { commerce } from '../../../lib/commerce';
 
 const steps = ["Shipping address", "Payment details"];
 
-const Checkout = ({}) => {
-    const classes = useStyles();
+const Checkout = ({ cart }) => {
     const [activeStep, setActiveStep] = useState(0);
+    const [checkoutToken, setCheckoutToken] = useState(null);
+    const classes = useStyles();
 
     useEffect(() => {
+        // In useEffect, you can not supply an async callback. If you want to use an async function,
+        // you'll have to define it first. That's why I defined this function here. 
         const generateToken = async () => {
             try {
-                const token = await commerce.checkout.generateToken();
-            } catch (error) {}
+                const token = await commerce.checkout.generateToken(cart.id, {type: "cart"});
+                console.log("YOUR TOKEN HAS BEEN GENERATED. IT IS:");
+                console.log(token);
+                setCheckoutToken(token);
+            } catch (error) {
+                console.log("GENERATING TOKEN ENDED WITH AN ERROR: ");
+                console.log(error.message);
+            }
         }
+        generateToken()
     }, []);
 
     const Confirmation = () => (
@@ -26,7 +36,7 @@ const Checkout = ({}) => {
     );
 
     const Form = () => activeStep === 0
-        ? <AddressForm/>
+        ? <AddressForm checkoutToken={checkoutToken}/>
         : <PaymentForm/>
     
     return (
