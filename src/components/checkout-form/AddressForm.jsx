@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { InputLabel, Select, MenuItem, Button, Grid, Typography } from '@material-ui/core';
 import { useForm, FormProvider } from 'react-hook-form';
 import FormInput from './FormInput';
 import { commerce } from '../../lib/commerce';
 
-const AddressForm = () => {
+const AddressForm = ({ checkoutToken }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState("");
     const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
@@ -13,10 +13,19 @@ const AddressForm = () => {
     const [selectedOption, setSelectedOption] = useState();
     const methods = useForm();
 
+    const countries = Object.entries(shippingCountries.map(([code, name]) => ({id: code, label: name})))
+
     const fetchShippingCountries = async (checkoutTokenId) => {
         const { countries } = await commerce.services.localeListShippingCountries(checkoutTokenId);
+        console.log("YOUR SHIPPING COUNTRIES ARE:");
+        console.log(countries);
         setShippingCountries(countries);
+        setSelectedCountry(Object.keys(countries)[0]);
     }
+
+    useEffect(() => {
+        fetchShippingCountries(checkoutToken.id);
+    }, []);
 
     return (
         <>
@@ -30,15 +39,15 @@ const AddressForm = () => {
                         <FormInput required name="email" label="Email" />
                         <FormInput required name="city" label="City" />
                         <FormInput required name="Zip" label="Postal code" />
-                        {/*<Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <InputLabel>Shipping Country</InputLabel>
-                            <Select value="" fullWidth onChanged="">
+                            <Select value={selectedCountry} fullWidth onChanged={(e)=>setSelectedCountry(e.target.value)}>
                                 <MenuItem key="" value="">
                                     Select Me
                                 </MenuItem>
                             </Select>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        {/*<Grid item xs={12} sm={6}>
                             <InputLabel>Shipping Country</InputLabel>
                             <Select value="" fullWidth onChanged="">
                                 <MenuItem key="" value="">
