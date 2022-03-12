@@ -9,25 +9,33 @@ const steps = ["Shipping address", "Payment details"];
 
 const Checkout = ({ cart }) => {
     const [activeStep, setActiveStep] = useState(0);
-    const [checkoutToken, setCheckoutToken] = useState(null);
+    const [checkoutToken, setCheckoutToken] = useState({});
+    const [shippingData, setShippingData] = useState({});
     const classes = useStyles();
 
     useEffect(() => {
         // In useEffect, you can not supply an async callback. If you want to use an async function,
-        // you'll have to define it first. That's why I defined this function here. 
+        // you'll have to define it first. That's why I defined this function outside useState.
         const generateToken = async () => {
             try {
-                const token = await commerce.checkout.generateToken(cart.id, {type: "cart"});
-                console.log("YOUR TOKEN HAS BEEN GENERATED. IT IS:");
-                console.log(token);
+                const token = await commerce.checkout.generateToken(cart.id, {type: 'cart'});
+                console.log("YOUR TOKEN HAS BEEN GENERATED. IT IS:", token);
                 setCheckoutToken(token);
             } catch (error) {
-                console.log("GENERATING TOKEN ENDED WITH AN ERROR: ");
-                console.log(error.message);
+                console.log("GENERATING TOKEN ENDED WITH AN ERROR: ", error);
             }
-        }
-        generateToken()
-    }, []);
+        };
+        generateToken();
+    }, [cart]);
+
+    const moveToNextStep = () => setActiveStep((currentActiveStep) => currentActiveStep + 1);
+    const moveToPreviousStep = () => setActiveStep((currentActiveStep) => currentActiveStep - 1);
+
+    const next = (data) => {
+        setShippingData(data);
+
+        moveToNextStep();
+    }
 
     const Confirmation = () => (
         <div>
